@@ -1,0 +1,83 @@
+/* Start:/bitrix/templates/main/components/bitrix/system.pagenavigation/new/style.css*/
+
+div.modern-page-navigation {
+  padding: 0.5em 0;
+  a {
+    border-left-width: 1px;
+    border-left-style: solid;
+    padding-left: 0.75em;
+    padding-right: 0.5em;
+    text-decoration: none;
+  }
+}
+
+span {
+  &.modern-page-current, &.modern-page-dots {
+    border-left-width: 1px;
+    border-left-style: solid;
+    padding-left: 0.75em;
+    padding-right: 0.5em;
+    text-decoration: none;
+  }
+}
+
+div.modern-page-navigation {
+  a {
+    &.modern-page-previous {
+      border-right-width: 1px;
+      border-right-style: solid;
+      border-left: none;
+    }
+    &.modern-page-first {
+      border-left: none;
+      padding-left: 0.5em;
+    }
+  }
+  span.modern-page-first {
+    border-left: none;
+    padding-left: 0.5em;
+  }
+}
+
+span.modern-page-current {
+  font-weight: bold;
+}
+
+div.modern-page-navigation a, span.modern-page-current, div.modern-page-navigation a.modern-page-previous, span.modern-page-dots {
+  border-color: #cdcdcd;
+}
+
+/* End */
+
+/* Start:/bitrix/templates/main/components/bitrix/catalog/new/bitrix/catalog.section/.default/style.css*/
+
+.catalog-price {
+  color: red;
+}
+
+div {
+  &.catalog-section table td {
+    padding-right: 10px;
+    padding-top: 10px;
+  }
+  &.top_pager {
+    float: right;
+    margin-top: -50px;
+    font-family: proxima_novaregular;
+  }
+  &.bottom_pager {
+    float: right;
+    margin-top: 20px;
+    font-family: proxima_novaregular;
+  }
+  &.top_pager a, &.bottom_pager a {
+    color: black;
+  }
+}
+
+.modern-page-dots, .modern-page-previous, .modern-page-next {
+  color: #FF7800 !important;
+  font-weight: bold;
+}
+
+/* End */

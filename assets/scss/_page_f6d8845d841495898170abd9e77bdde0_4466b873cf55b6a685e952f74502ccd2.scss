@@ -1,0 +1,297 @@
+/* Start:/bitrix/templates/main/components/bitrix/catalog/new/bitrix/catalog.element/.default/style.css*/
+
+.catalog-price {
+  color: red;
+}
+
+.hidden {
+  display: none;
+}
+
+.success {
+  background-color: #DEF2DE !important;
+  border-color: #A7BBAC !important;
+  color: #5C7E60 !important;
+}
+
+.fitem {
+  width: 125px;
+  float: left;
+  margin-right: 15px;
+  a {
+    text-decoration: none;
+    color: #363636;
+    text-align: center;
+  }
+}
+
+.fimage {
+  display: table-cell;
+  vertical-align: middle;
+  width: 125px;
+  img {
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+.fname {
+  margin-top: 10px;
+}
+
+.fbox {
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.fprice {
+  font-weight: bold;
+}
+
+.sdelivery {
+  color: #FFF;
+  font-size: 10px;
+  text-align: center;
+  display: block;
+  text-transform: uppercase;
+  line-height: 18px;
+  font-family: 'proxima_novabold';
+  border-top: 1px solid #FA983D;
+  margin: 14px 20px 0;
+  padding: 5px 0;
+}
+
+.product-bigcart__buy {
+  margin-top: 0 !important;
+}
+
+/* End */
+
+/* Start:/bitrix/templates/main/components/intaro/one.click.buy/new/style.css*/
+
+.intaro-modules-button.disabled {
+  background: url('../img/order_btn.gif') 0 3px repeat-x;
+  opacity: 0.8;
+  color: #999;
+  &:hover, &:active {
+    background: url('../img/order_btn.gif') 0 3px repeat-x;
+    opacity: 0.8;
+    color: #999;
+  }
+}
+
+div.intaro-modules-button {
+  float: left;
+}
+
+select.input-text {
+  padding: 12px 17px;
+  font-size: 16px;
+  line-height: 20px;
+  border: 1px solid #DADADA;
+  border-radius: 2px;
+  position: relative;
+  width: 224px;
+  font-family: 'proxima_novaregular';
+  color: #363636;
+  outline: none;
+}
+
+.intaro-modules-button {
+  &:hover {}
+  &:active {
+    background: url('../img/order_btn.gif') 0 -54px repeat-x;
+    box-shadow: none;
+  }
+  input {
+    display: block;
+    padding: 0;
+    text-align: center;
+    width: 260px;
+    height: 46px;
+    position: relative;
+    vertical-align: top;
+    margin: 0;
+    border: 0;
+    cursor: pointer;
+    line-height: 44px;
+    height: 44px;
+    padding: 1px 23px 0;
+    color: #FFF;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    background: #FF7A03;
+    border-radius: 2px;
+    font-family: 'proxima_novabold';
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      color: #333;
+      text-decoration: none;
+      background-color: #E94F0D;
+      background-position: 0 -15px;
+      -webkit-transition: background-position .1s linear;
+      -moz-transition: background-position .1s linear;
+      -o-transition: background-position .1s linear;
+      transition: background-position .1s linear;
+    }
+  }
+}
+
+.ocb-form {
+  width: 300px;
+  background-color: #fff;
+  display: none;
+  box-shadow: 0 10px 25px 0 #262626;
+  -webkit-box-shadow: 0 10x 25px 0 #262626;
+  -moz-box-shadow: 0 10px 25px 0 #262626;
+  -moz-border-radius: 3px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -190px;
+  margin-top: -200px;
+  z-index: 1500;
+  padding: 37px 40px 40px;
+  background: #FFF;
+  form > div {
+    padding: 0 20px 0px;
+  }
+}
+
+* html .ocb-form {
+  position: absolute;
+}
+
+.ocb-form-header {
+  height: 40px;
+  margin: 2px 2px 18px;
+}
+
+.ocb-form-header-caption {
+  color: #363636;
+  font-size: 22px;
+  font-family: 'proxima_novaextrabold';
+  font-weight: 300;
+  text-align: center;
+}
+
+.ocb-form-header-close {
+  /*width:12px;
+  height:13px;
+  float:right;
+  background:url('../img/close.png') -54px -4px no-repeat;
+  margin:13px 20px 0 0;*/
+  cursor: pointer;
+  width: 33px;
+  height: 32px;
+  right: -52px;
+  top: 0;
+  background: url(../img/sprite.png) no-repeat -151px -229px;
+  position: absolute;
+  &:hover {
+    background-position: -187px -229px;
+  }
+  &:active {
+    background: url('../img/close.png') -6px -4px no-repeat;
+  }
+}
+
+.ocb-form-field {
+  margin: 0 0px 17px;
+  label {
+    display: block;
+    clear: both;
+    font: 600 12px Arial;
+    color: #1a1a1a;
+    margin-bottom: 3px;
+  }
+  ins {
+    font: 12px 600 Arial;
+    color: #ff1154;
+    text-decoration: none;
+  }
+  input, select {
+    padding: 3px 2px;
+    font: 12px Arial;
+  }
+  input {
+    width: 97%;
+  }
+  select {
+    width: 100%;
+  }
+}
+
+.ocb-error-msg {
+  display: none;
+  clear: both;
+  font: 11px Arial;
+  color: #dd2424;
+  margin-top: 2px;
+}
+
+.ocb-form-loader {
+  margin: 15px 5px 0;
+  background: url('../img/ajax-loader.gif') no-repeat;
+  display: none;
+  width: 16px;
+  height: 16px;
+  float: right;
+}
+
+.ocb-form-result {
+  display: none;
+  clear: both;
+  width: 340px;
+  margin: 80px 20px 40px;
+  height: 120px;
+}
+
+.ocb-result-icon-success, .ocb-result-icon-fail {
+  width: 300px;
+  height: 25px;
+  margin: 0 auto;
+  font: 16px Arial;
+  text-indent: 40px;
+  padding: 3px 0;
+  display: none;
+}
+
+.ocb-result-icon-success {
+  background: url('../img/order_success.png') no-repeat;
+  color: #1f760b;
+}
+
+.ocb-result-icon-fail {
+  background: url('../img/order_error.png') no-repeat;
+  color: #dc1d1d;
+}
+
+.ocb-result-text {
+  width: 250px;
+  color: #000;
+  font: 14px Arial;
+  line-height: 20px;
+}
+
+/* End */
+
+/* Start:/bitrix/templates/main/components/bitrix/catalog.section/likethis/style.css*/
+
+.catalog-price {
+  color: red;
+}
+
+div.catalog-section table td {
+  padding-right: 10px;
+  padding-top: 10px;
+}
+
+/* End */
