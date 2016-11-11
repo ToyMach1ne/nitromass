@@ -3,7 +3,7 @@
     <div class="inside">
         <?php easy_breadcrumbs(); ?>
         <div class="products-catalog__title">
-            <h2>Категории <span>(7374)</span></h2></div>
+            <h2><?php the_title(); ?> <span>(7374)</span></h2></div>
         <div class="content-taber">
             <div class="content-taber__head">
                 <ul class="content-taber__head__list horizontal">
@@ -13,60 +13,40 @@
             </div>
             <div class="content-taber__body">
                 <div class="content-taber__tab" id="tab1">
-<?php ?>
-<ul>
-    <?php $hiterms = get_terms("categories", array("orderby" => "slug", "parent" => 0)); ?>
-    <?php foreach($hiterms as $key => $hiterm) : ?>
-        <li>
-            <?php echo $hiterm->name; ?>
-            <?php $loterms = get_terms("categories", array("orderby" => "slug", "parent" => $hiterm->term_id)); ?>
-            <?php if($loterms) : ?>
-                <ul>
-                    <?php foreach($loterms as $key => $loterm) : ?>
-                        <li><?php echo $loterm->name; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
-
-
-
-
-<?php /* ?>
                     <table>
                         <tbody>
                             <tr>
                                 <td>
                                     <table class="categories-rows__table">
                                         <tbody>
-                                        <?php $terms = get_field('taxonomy_list', 76); if( $terms ): ?>
-                                        <?php foreach( $terms as $term_id ): ?>
-                                          <?php $term = get_term( $term_id ); ?>
+                                        <?php $hiterms = get_terms("categories", array("orderby" => "slug", "parent" => 0)); ?>
+                                        <?php foreach($hiterms as $key => $hiterm) : ?>
                                             <tr>
                                                 <td>
-                                                    <div class="pull-left"><a href="<?php echo get_term_link( $term ); ?>"><?php echo $term->name; ?></a></div>
-                                                    <div class="pull-right"><?php wp_count_posts( $type, $perm ); ?></div>
+                                                    <div class="pull-left"><a href="<?php echo get_term_link( $hiterm ); ?>"><?php echo $hiterm->name; ?></a></div>
+                                                    <div class="pull-right"></div>
                                                 </td>
                                             </tr>
+                                            <?php $loterms = get_terms("categories", array("orderby" => "slug", "parent" => $hiterm->term_id)); ?>
+                                            <?php if($loterms) : ?>
+                                            <?php foreach($loterms as $key => $loterm) : ?>
                                             <tr>
                                                 <td>
-                                                    <div class="pull-left"><a href="/catalog/aksessuary/">Аксессуары</a></div>
-                                                    <div class="pull-right"><?php wp_count_posts( $type, $perm ); ?></div>
+                                                    <div class="pull-left">
+                                                      <a href="<?php echo get_term_link( $loterm ); ?>" class="dochern"><?php echo $loterm->name; ?></a>
+                                                    </div>
+                                                    <div class="pull-right"></div>
                                                 </td>
                                             </tr>
                                             <?php endforeach; ?>
                                             <?php endif; ?>
+                                            <?php endforeach; ?>
                                         </tbody>
                                     </table>
                                 </td>
                               </tr>
                             </tbody>
                           </table>
-
-<?php */ ?>
-
                 </div><!-- content-taber__tab -->
                 <div class="content-taber__tab" id="tab2">
                     <div class="categories-tiles">

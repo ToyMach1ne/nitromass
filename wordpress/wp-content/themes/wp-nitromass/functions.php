@@ -82,6 +82,7 @@ if (function_exists('add_theme_support')) {
   add_image_size('large', 1200, '', true); // Large Thumbnail
   add_image_size('medium', 600, '', true); // Medium Thumbnail
   add_image_size('small', 250, '', true); // Small Thumbnail
+  add_image_size('little', 190, 190, '', true); // Small Thumbnail
   add_image_size('custom-size', 700, 200, true); // Custom Thumbnail Size call using the_post_thumbnail('custom-size');
 
   // Enables post and comment RSS feed links to head
@@ -725,6 +726,36 @@ function taxonomies_category() {
   register_taxonomy( 'categories', array( 'product' ), $args );
 }
 
+
+// hook into the init action and call create_book_taxonomies when it fires
+add_action( 'init', 'taxonomies_manufacturer', 0 );
+function taxonomies_manufacturer() {
+  // Add new taxonomy, make it hierarchical (like categories)
+  $labels = array(
+    'name'              => 'Производитель',
+    'singular_name'     => 'Производитель',
+    'search_items'      => 'Search',
+    'all_items'         => 'All',
+    'parent_item'       => 'Parent',
+    'parent_item_colon' => 'Parent',
+    'edit_item'         => 'Edit',
+    'update_item'       => 'Update',
+    'add_new_item'      => 'Add',
+    'new_item_name'     => 'Add',
+    'menu_name'         => 'Производитель',
+  );
+
+  $args = array(
+    'hierarchical'      => false,
+    'labels'            => $labels,
+    'show_ui'           => true,
+    'show_admin_column' => true,
+    'query_var'         => true,
+    'rewrite'           => array( 'slug' => 'manufacturer' ),
+  );
+
+  register_taxonomy( 'manufacturer', array( 'product' ), $args );
+}
 
 
 
