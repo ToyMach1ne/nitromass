@@ -2,16 +2,18 @@
 <div class="main">
     <div class="inside">
         <?php easy_breadcrumbs(); ?>
+                        <?php $queried_object = get_queried_object();
+                $term_id = $queried_object->term_id;
+                $term = get_term( $term_id); ?>
+                <?php $args = array(
+                        'post_type' => 'product',
+                        'tax_query' => array(
+                            array(
+                            'taxonomy' => 'categories',
+                            'field' => 'id',
+                            'terms' => $term_id ) ) ); ?>
         <div class="products-catalog__title">
             <h2> <?php single_term_title(); ?>
-             <?php
-$args = array(
-'post_type' => 'Аксессуары',
-'post_status' => 'published',
-'taxonomy-name' => 'Аксессуары',
-'numberposts' => -1,
-    );
-?>
             <span> <?php  echo $num = count( get_posts( $args ) ); ?></span></h2></div>
         <div class="middle middle-info clearfix">
             <div class="top_pager">
@@ -26,25 +28,9 @@ $args = array(
             <div style="clear: both;"></div>
             <div class="middle__container">
                 <div class="products-catalog">
-                <?php
-$queried_object = get_queried_object();
-$term_id = $queried_object->term_id;
-$term = get_term( $term_id); ?>
                     <ul class="products-catalog__list horizontal">
-                    <?php
-                        $args = array(
-                        'post_type' => 'product',
-                        'tax_query' => array(
-                            array(
-                            'taxonomy' => 'categories',
-                            'field' => 'id',
-                            'terms' => $term_id
-                             )
-                          )
-                        );
-                      ?>
-                      <?php query_posts(  $args  ); ?>
-                      <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+                          <?php query_posts(  $args  ); ?>
+                          <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
                         <li class="products-catalog__item">
                             <div class="box-product">
                                 <div class="box-product__img">
@@ -72,10 +58,14 @@ $term = get_term( $term_id); ?>
                                         <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                                     </div>
                                     <div class="box-product__info"><?php the_field('pack'); ?></div>
-                                    <?php $hiterms = get_terms("manufacturer", array("orderby" => "slug", "parent" => $hiterm_id)); ?>
-                                        <?php foreach($hiterms as $key => $hiterm) : ?>
-                                    <div class="box-product__info"><a href="/brands/6_pack_fitness/"><?php echo $hiterm->name; ?></a></div>
-                                    <?php endforeach; ?>
+                                  <?php $term_list = wp_get_post_terms($post->ID, 'manufacturer', array("fields" => "ids"));
+                                    $currentId = $term_list[0];
+                                    $currentTerm = get_term_by('id', $currentId, 'manufacturer');
+                                    $currentName = $currentTerm->name;
+                                    $currentLink = $currentTerm->slug; ?>
+                                <div class="box-product__info">
+                                  <a href="<?php echo home_url(); ?>/manufacturer/<?php echo $currentLink; ?>"><?php echo $currentName; ?></a>
+                                </div>
                                 </div>
                                 <div class="box-product__types clearfix">
                                     <div class="pull-left">

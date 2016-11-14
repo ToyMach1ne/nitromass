@@ -27,21 +27,20 @@
                                 <ul class="block-product__slider__big">
                                     <li id="bp__slider__tab1">
                                         <a href="#">
-                                        <img src="<?php echo get_template_directory_uri(); ?>/img/pot.jpg" alt="BioTech USA Beef Protein (1816гр)"></a>
+                                        <?php the_post_thumbnail('medium'); ?>
                                     </li>
                                 </ul>
                                 <ul class="block-product__slider__small">
                                     <li style="width: 90px;" class="active">
                                         <a href="#bp__slider__tab1">
-                                        <img style="max-height: 90px; max-width: 90px; margin:0 auto;" src="<?php echo get_template_directory_uri(); ?>/img/small-prot.jpg" alt=""><span class="border"></span></a>
+                                          <?php the_post_thumbnail( 'tiny'); ?>
+                                          <span class="border"></span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="photo_for_basket hidden">
-                                <img src="/upload/resize_cache/iblock/0b2/190_190_1/0b208348e8ed3e5c332e95314b1edeb3.jpg" alt="">
-                            </div>
-                            <div class="block-product__like">
-
+                                <?php the_post_thumbnail( 'little'); ?>
                             </div>
                             <div class="block-product__taber">
                                 <div class="block-product__taber__head">
@@ -59,14 +58,24 @@
                                     </div>
                                     <div class="bp__tab" id="bp__tab2">
                                         <div class="block-product__description">
+                                        <?php $posts = get_field('another_pack'); if( $posts ): ?>
+                                        <?php foreach( $posts as $post): // variable must be called $post (IMPORTANT) ?>
+                                            <?php setup_postdata($post); ?>
                                             <div class="fitem">
-                                                <a href="/catalog/govyazhiy_protein/biotech_usa_beef_protein_500gr.html">
-                                                    <div class="fimage"><img src="/upload/resize_cache/iblock/a01/100_100_1/a01d6fe8fc4d65f905b169bcfe057349.jpg"></div>
-                                                    <div class="fname">Beef Protein</div>
-                                                    <div class="fbox">500 гр</div>
-                                                    <div class="fprice">1 150 руб</div>
+                                                <a href="<?php the_permalink(); ?>">
+                                                    <div class="fimage">
+                                                      <?php if ( has_post_thumbnail()) :?>
+                                                        <?php the_post_thumbnail('little'); ?>
+                                                      <?php endif; ?><!-- /post thumbnail -->
+                                                    </div>
+                                                    <div class="fname"><?php the_title(); ?></div>
+                                                    <div class="fbox"><?php the_field('pack'); ?></div>
+                                                    <div class="fprice"><?php the_field('price'); ?></div>
                                                 </a>
                                             </div>
+                                            <?php endforeach; ?>
+                                            <?php wp_reset_postdata(); ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <div class="bp__tab" id="bp__tab3">
@@ -176,14 +185,18 @@
                     </div>
                 </div>
                 <aside class="sidebar-right">
-                    <div class="product-articul">Артикул: NM98609</div>
+                    <div class="product-articul">Артикул: <?php the_field('article'); ?></div>
                     <div class="product-bigcart ">
                         <div class="product-bigcart__logo">
-                            <a href="/brands/biotech-usa/"><img src="/upload/resize_cache/iblock/8e5/218_136_1/8e573e4ddb90d54ff8abf99141ce7ba3.png" alt=""></a>
+                            <a href="#">
+                              <?php $image = get_field('manufacture_img'); if( !empty($image) ): ?>
+                              <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" />
+                              <?php endif; ?>
+                            </a>
                         </div>
                         <div class="product-bigcart__weight">
                             <label>Упаковка</label>
-                            <strong>1816 гр</strong>
+                            <strong><?php the_field('pack'); ?></strong>
                         </div>
                         <div class="product-bigcart__types clearfix">
                             <div class="pull-left">
@@ -223,7 +236,8 @@
                         </div>
                         <div class="product-bigcart__price available">
                             <label>цена за шт.</label>
-                            <div class="product-price__new"><strong>3 190</strong> руб.</div><a href="#" class="subscribe_link" onclick="subscribe();">Уведомить о снижении цены?</a>
+                            <div class="product-price__new"><strong><?php the_field('price'); ?></strong> руб.</div>
+                            <a href="#" class="subscribe_link" onclick="subscribe();">Уведомить о снижении цены?</a>
                         </div>
                         <div class="product-bigcart__none noavailable" style="display: none;">
                             <h4>К сожалению данного<br>товара нет в наличии</h4></div>
@@ -323,12 +337,34 @@
                 </div>
                 <div class="products-slider">
                     <div class="flexslider carousel" id="products-slider0">
-                        <div class="flex-viewport" style="overflow: hidden; position: relative;">
-                            <ul class="slides" style="width: 2400%; transition-duration: 0s; transform: translate3d(0px, 0px, 0px);">
-                                <li style="width: 222px; float: left; display: block;">
+                        <div class="flex-viewport">
+                            <ul class="slides">
+
+                            <!-- Post ID -->
+                                <?php $terms = get_the_terms( $post->ID, 'categories');
+                                foreach ( $terms as $term ) {
+                                    $termID[] = $term->term_id;
+                                }
+                                $id = get_the_ID(); ?>
+                                <!-- end POst ID -->
+                                <?php query_posts(array(
+                                  'post_type' => 'product',
+                                  'showposts' => 12,
+                                  'post__not_in' =>  array( $id ),
+                                  'tax_query' => array(
+                                      array(
+                                      'taxonomy' => 'categories',
+                                      'field' => 'id',
+                                      'terms' => $termID[0] ))) ); ?>
+                                <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+                                <li class="product-wrapp">
                                     <div class="box-product">
                                         <div class="box-product__img">
-                                            <a href="/catalog/kompleksnyy_protein/weider_protein_80_plus_750gr.html"><img src="/upload/resize_cache/iblock/dd5/190_190_1/dd5c781a8365eb40e5c672981db96653.png" alt="Weider Protein 80 Plus (750гр)"></a>
+                                            <?php if ( has_post_thumbnail()) :?>
+                                              <a class="single-thumb" href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
+                                                <?php the_post_thumbnail('little'); ?>
+                                              </a>
+                                            <?php endif; ?><!-- /post thumbnail -->
                                         </div>
                                         <div class="box-product__comments clearfix">
                                             <div class="rating pull-left">
@@ -341,14 +377,14 @@
                                                 </ul>
                                             </div>
                                             <div class="comments-link pull-left">
-                                                <a href="/catalog/kompleksnyy_protein/weider_protein_80_plus_750gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
+                                                <a href="#"><span class="icon-comment"></span>0</a>
                                             </div>
                                         </div>
                                         <div class="box-product__text">
                                             <div class="box-product__title">
-                                                <h3><a href="/catalog/kompleksnyy_protein/weider_protein_80_plus_750gr.html">Protein 80 Plus</a></h3>
+                                                <h3><a href="#"><?php the_title(); ?></a></h3>
                                             </div>
-                                            <div class="box-product__info">750 гр</div>
+                                            <div class="box-product__info"><?php the_field('pricegrn'); ?> гр</div>
                                         </div>
                                         <div class="box-product__types clearfix">
                                             <div class="pull-left">
@@ -391,7 +427,7 @@
                                         <div class="box-product__bottom clearfix">
                                             <div class="product-price pull-left">
                                                 <div style="display: none;" class="product-price__new">
-                                                    <strong>1 260</strong> руб.
+                                                    <strong><?php the_field('price'); ?></strong> руб.
                                                 </div>
                                                 <div class="product-price__none">Нет в наличии</div>
                                             </div>
@@ -404,779 +440,10 @@
                                         <input type="hidden" value="notavailable" name="93488">
                                         <input type="hidden" value="notavailable" name="93487">
                                     </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/syvorotochnyy_protein/usn_whey_oats_800gr.html"><img src="/upload/resize_cache/iblock/bd7/190_190_1/bd771db00aeb2a15ce6af1d94425b349.png" alt="USN - Whey &amp; Oats (800гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/syvorotochnyy_protein/usn_whey_oats_800gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/syvorotochnyy_protein/usn_whey_oats_800gr.html">Whey &amp; Oats</a></h3>
-                                            </div>
-                                            <div class="box-product__info">800 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="114977">Печенье</option>
-                                                        <option class="red" value="114976">Булочка с корицей</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Печенье</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Печенье</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Булочка с корицей</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="114977">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>0</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="114977">
-                                        <input type="hidden" value="notavailable" name="114976">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/drugie_proteiny/pureprotein_vegetarian_formula_multicomponent_protein_1000gr.html"><img src="/upload/resize_cache/iblock/053/190_190_1/0533e76f8c80cf6a7592a6cb6f16f8d4.jpg" alt="PureProtein - Vegetarian Formula Multicomponent Protein (1000гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/drugie_proteiny/pureprotein_vegetarian_formula_multicomponent_protein_1000gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/drugie_proteiny/pureprotein_vegetarian_formula_multicomponent_protein_1000gr.html">Vegetarian Formula Multicomponent Protein</a></h3>
-                                            </div>
-                                            <div class="box-product__info">1000 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="95130">Двойной шоколад</option>
-                                                        <option class="red" value="95129">Шоколадное печенье</option>
-                                                        <option class="red" value="94900">Вишневое наслаждение</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Двойной шоколад</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Двойной шоколад</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Шоколадное печенье</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Вишневое наслаждение</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="95130">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>650</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="95130">
-                                        <input type="hidden" value="notavailable" name="95129">
-                                        <input type="hidden" value="notavailable" name="94900">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/syvorotochnyy_protein/scitec_nutrition_muscle_army_whey_blast_2100gr.html"><img src="/upload/resize_cache/iblock/b02/190_190_1/b02ee7d39ba4f3e0759ac1e4967109ad.jpg" alt="Scitec Nutrition - Muscle Army Whey Blast (2100гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/syvorotochnyy_protein/scitec_nutrition_muscle_army_whey_blast_2100gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/syvorotochnyy_protein/scitec_nutrition_muscle_army_whey_blast_2100gr.html">Muscle Army Whey Blast</a></h3>
-                                            </div>
-                                            <div class="box-product__info">2100 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="111657">Ваниль</option>
-                                                        <option class="red" value="111645">Клубника</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Ваниль</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Ваниль</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Клубника</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="111657">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>0</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="111657">
-                                        <input type="hidden" value="notavailable" name="111645">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/syvorotochnyy_protein/actiformula_whey_collagen_600gr.html"><img src="/upload/resize_cache/iblock/f68/190_190_1/f68a8e0d016dce66ae8e2090859d2e06.jpg" alt="ActiFormula - Whey&amp;Collagen (600гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/syvorotochnyy_protein/actiformula_whey_collagen_600gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/syvorotochnyy_protein/actiformula_whey_collagen_600gr.html">Whey&amp;Collagen</a></h3>
-                                            </div>
-                                            <div class="box-product__info">600 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>680</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="100751">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/syvorotochnyy_protein/scitec_nutrition_superb_2160gr.html"><img src="/upload/resize_cache/iblock/804/190_190_1/804acfdef7d89c5151efc3e283b9d8d9.png" alt="Scitec Nutrition - Superb (2160гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/syvorotochnyy_protein/scitec_nutrition_superb_2160gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/syvorotochnyy_protein/scitec_nutrition_superb_2160gr.html">Superb</a></h3>
-                                            </div>
-                                            <div class="box-product__info">2160 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="111867">Шоколад</option>
-                                                        <option class="red" value="111860">Ваниль</option>
-                                                        <option class="red" value="111848">Клубника</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Шоколад</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Шоколад</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Ваниль</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Клубника</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="111867">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>0</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="111867">
-                                        <input type="hidden" value="notavailable" name="111860">
-                                        <input type="hidden" value="notavailable" name="111848">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/kompleksnyy_protein/dymatize_elite_fusion_7_1320gr.html"><img src="/upload/resize_cache/iblock/ce4/190_190_1/ce441bc546de465030fb3f7a5853dd1e.jpg" alt="Dymatize Elite Fusion 7 (1320гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/kompleksnyy_protein/dymatize_elite_fusion_7_1320gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/kompleksnyy_protein/dymatize_elite_fusion_7_1320gr.html">Elite Fusion 7</a></h3>
-                                            </div>
-                                            <div class="box-product__info">1320 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="94583">Шоколад</option>
-                                                        <option class="red" value="94582">Печенье-крем</option>
-                                                        <option class="red" value="94581">Моккачино</option>
-                                                        <option class="red" value="94580">Клубника</option>
-                                                        <option class="red" value="94579">Ваниль</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Шоколад</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Шоколад</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Печенье-крем</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Моккачино</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Клубника</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Ваниль</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="94583">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>1 290</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="94583">
-                                        <input type="hidden" value="notavailable" name="94582">
-                                        <input type="hidden" value="notavailable" name="94581">
-                                        <input type="hidden" value="notavailable" name="94580">
-                                        <input type="hidden" value="notavailable" name="94579">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/syvorotochnyy_protein/soul_project_wps_100_whey_protein_908gr.html"><img src="/upload/resize_cache/iblock/b16/190_190_1/b1665d98337ff82ef512625a0dbb9c3e.jpg" alt="Soul Project - WPS 100% Whey Protein (908гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/syvorotochnyy_protein/soul_project_wps_100_whey_protein_908gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/syvorotochnyy_protein/soul_project_wps_100_whey_protein_908gr.html">WPS 100% Whey Protein</a></h3>
-                                            </div>
-                                            <div class="box-product__info">908 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id green" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="green" value="103709">Лимон-йогурт</option>
-                                                        <option class="red" value="103708">Клубника</option>
-                                                        <option class="red" value="103707">Ваниль-корица</option>
-                                                        <option class="red" value="103680">Черника</option>
-                                                        <option class="red" value="94928">Шоколад</option>
-                                                        <option class="red" value="94927">Печенье-крем</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Лимон-йогурт</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="green" class="selected sel green" style="display: block;">Лимон-йогурт</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Клубника</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Ваниль-корица</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Черника</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Шоколад</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Печенье-крем</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="103709">
-                                            </div>
-                                            <div class="product-counter  pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div class="product-price__new">
-                                                    <strong>1 790</strong> руб.
-                                                </div>
-                                                <div style="display: none;" class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="available" name="103709">
-                                        <input type="hidden" value="notavailable" name="103708">
-                                        <input type="hidden" value="notavailable" name="103707">
-                                        <input type="hidden" value="notavailable" name="103680">
-                                        <input type="hidden" value="notavailable" name="94928">
-                                        <input type="hidden" value="notavailable" name="94927">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/zameniteli_pitaniya/pureprotein_bliny_protein_pancakes_200gr.html"><img src="/upload/resize_cache/iblock/3a4/190_190_1/3a403ebf7d3f9d5c03fc2aa1c85928d7.jpg" alt="PureProtein - Блины Protein Pancakes (200гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/zameniteli_pitaniya/pureprotein_bliny_protein_pancakes_200gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/zameniteli_pitaniya/pureprotein_bliny_protein_pancakes_200gr.html">Блины Protein Pancakes</a></h3>
-                                            </div>
-                                            <div class="box-product__info">200 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>190</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="97860">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/drugie_proteiny/san_raw_fusion_450gr.html"><img src="/upload/resize_cache/iblock/867/190_190_1/867dc56240d382d2fa25688b45337c15.png" alt="SAN Raw Fusion (450гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/drugie_proteiny/san_raw_fusion_450gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/drugie_proteiny/san_raw_fusion_450gr.html">Raw Fusion</a></h3>
-                                            </div>
-                                            <div class="box-product__info">450 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="100770">Шоколад</option>
-                                                        <option class="red" value="100769">Ваниль</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Шоколад</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Шоколад</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Ваниль</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="100770">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>720</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="100770">
-                                        <input type="hidden" value="notavailable" name="100769">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/kompleksnyy_protein/san_meta_force_5_0_2297gr.html"><img src="/upload/resize_cache/iblock/cce/190_190_1/cce25ac1ea51f11a5ab7dc3fa62909c2.png" alt="SAN Meta Force 5.0 (2297гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/kompleksnyy_protein/san_meta_force_5_0_2297gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/kompleksnyy_protein/san_meta_force_5_0_2297gr.html">Meta Force 5.0</a></h3>
-                                            </div>
-                                            <div class="box-product__info">2297 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <div class="jq-selectbox jqselect item_id red" style="display: inline-block; position: relative; z-index:100">
-                                                    <select class="item_id" style="margin: 0px; padding: 0px; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;">
-                                                        <option class="red" value="93883">Шоколадный роки роуд</option>
-                                                        <option class="red" value="93882">Ваниль с миндалём</option>
-                                                    </select>
-                                                    <div class="jq-selectbox__select" style="position: relative">
-                                                        <div class="jq-selectbox__select-text">Шоколадный роки роуд</div>
-                                                        <div class="jq-selectbox__trigger">
-                                                            <div class="jq-selectbox__trigger-arrow"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="jq-selectbox__dropdown" style="position: absolute; width: 20px; left: 0px; display: none;">
-                                                        <div class="jq-selectbox__search" style="display: none;">
-                                                            <input type="search" autocomplete="off" placeholder="Поиск...">
-                                                        </div>
-                                                        <div class="jq-selectbox__not-found" style="display: none;">Совпадений не найдено</div>
-                                                        <ul style="position: relative; list-style: none; overflow: auto; overflow-x: hidden">
-                                                            <li data-jqfs-class="red" class="selected sel red" style="display: block;">Шоколадный роки роуд</li>
-                                                            <li data-jqfs-class="red" class=" red" style="display: block;">Ваниль с миндалём</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <input class="item_id" type="hidden" value="93883">
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>1 790</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="93883">
-                                        <input type="hidden" value="notavailable" name="93882">
-                                    </div>
-                                </li>
-                                <li style="width: 222px; float: left; display: block;">
-                                    <div class="box-product">
-                                        <div class="box-product__img">
-                                            <a href="/catalog/kompleksnyy_protein/qnt_protein_80_5000gr.html"><img src="/upload/resize_cache/iblock/508/190_190_1/50869c46dc553077ed2b6421c3cce70e.jpg" alt="QNT Protein 80 (5000гр)"></a>
-                                        </div>
-                                        <div class="box-product__comments clearfix">
-                                            <div class="rating pull-left">
-                                                <ul class="rating__list horizontal">
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item active"></li>
-                                                    <li class="rating__item "></li>
-                                                    <li class="rating__item "></li>
-                                                </ul>
-                                            </div>
-                                            <div class="comments-link pull-left">
-                                                <a href="/catalog/kompleksnyy_protein/qnt_protein_80_5000gr.html#bp__tab5"><span class="icon-comment"></span>0</a>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__text">
-                                            <div class="box-product__title">
-                                                <h3><a href="/catalog/kompleksnyy_protein/qnt_protein_80_5000gr.html">Protein 80</a></h3>
-                                            </div>
-                                            <div class="box-product__info">5000 гр</div>
-                                        </div>
-                                        <div class="box-product__types clearfix">
-                                            <div class="pull-left">
-                                                <input class="item_id" type="hidden" value="94620">
-                                                <div style="width: 62px; height: 20px;"></div>
-                                            </div>
-                                            <div class="product-counter disabled pull-left">
-                                                <div class="product-counter__container">
-                                                    <a class="minus disable" href="#">minus</a>
-                                                    <input class="kol" disabled="" type="text" value="1">
-                                                    <a class="plus" href="#">plus</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-product__bottom clearfix">
-                                            <div class="product-price pull-left">
-                                                <div style="display: none;" class="product-price__new">
-                                                    <strong>6 660</strong> руб.
-                                                </div>
-                                                <div class="product-price__none">Нет в наличии</div>
-                                            </div>
-                                            <div class="product-cart pull-right">
-                                                <a class="icon-cart-empty" href="javascript:void(0);"></a>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" value="notavailable" name="94620">
-                                    </div>
-                                </li>
-                            </ul>
+                                </li><!-- product-wrapp -->
+                                <?php endwhile; endif; ?>
+                                <?php wp_reset_query(); ?>
+                            </ul><!-- slides -->
                         </div>
                         <ol class="flex-control-nav flex-control-paging">
                             <li><a class="flex-active">1</a></li>

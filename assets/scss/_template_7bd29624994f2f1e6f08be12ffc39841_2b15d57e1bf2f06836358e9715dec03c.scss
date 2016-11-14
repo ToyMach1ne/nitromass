@@ -5889,6 +5889,8 @@ ul.horizontal {
   .flex-viewport {
     padding-bottom: 100px;
     margin-bottom: -100px;
+    overflow: hidden;
+     position: relative;
   }
   .slides {
     height: 474px;

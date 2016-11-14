@@ -6608,4 +6608,47 @@ table.data-table tfoot td
     }
   }
 }
+.products-slider {
+  .flex-viewport {
+
+    overflow: hidden;
+     position: relative;
+  }
+  .slides {
+  width: 2400%;
+   transition-duration: 0s;
+   transform: translate3d(0px, 0px, 0px);
+   .product-wrapp {
+      width: 222px;
+      float: left;
+      display: block;
+   }
+  }
+}
+
+.single {
+  .hidden {
+  display: none;
+}
+.ocb-form {
+  width: 300px;
+    background-color: #fff;
+    display: none;
+    box-shadow: 0 10px 25px 0 #262626;
+    -webkit-box-shadow: 0 10x 25px 0 #262626;
+    -moz-box-shadow: 0 10px 25px 0 #262626;
+    -moz-border-radius: 3px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -khtml-border-radius: 2px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -190px;
+    margin-top: -200px;
+    z-index: 1500;
+    padding: 37px 40px 40px;
+    background: #FFF;
+}
+}
 /* End */
