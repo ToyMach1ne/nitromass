@@ -1,9 +1,9 @@
 <?php
-define('DB_NAME', 'nitromass');
-define('DB_USER', 'nitromass');
-define('DB_PASSWORD', 'nitromass');
+define('DB_NAME', 'p284179_demo9');
+define('DB_USER', 'p284179_demo9');
+define('DB_PASSWORD', 'Bi66NPVhmR');
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'p284179.mysql.ihc.ru');
 
 define('DISABLE_WP_CRON', true);
 define('FS_METHOD', 'direct');

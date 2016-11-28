@@ -6,13 +6,11 @@
                         <ul class="slides">
                             <li>
                                 <div class="main-slider__text">
-                                    <p class="main-slider__category"><?php the_field('fp_image_title'); ?></p>
+                                    <p class="main-slider__category">При покупке Scivation Xtend шейкер в подарок !!!</p>
+                                    <h2></h2>
+                                    <p></p>
                                 </div>
-                                <?php  $image = get_field('fp_image');
-                                  if( !empty($image) ): ?>
-                                  <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" />
-                                <?php endif; ?>
-                            </li>
+                                <img src="<?php echo get_template_directory_uri(); ?>/img/bbb57c2abb24370d6df4686153cce0e6.jpg" /> </li>
                         </ul>
                     </div>
                 </div>
