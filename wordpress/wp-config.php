@@ -1,9 +1,10 @@
 <?php
-define('DB_NAME', 'p284179_demo9');
-define('DB_USER', 'p284179_demo9');
-define('DB_PASSWORD', 'Bi66NPVhmR');
+define('DB_NAME', 'p406909_nitro');
+define('DB_USER', 'p406909_nitro');
+define('DB_PASSWORD', '98f3B4F7Tp');
 
-define('DB_HOST', 'p284179.mysql.ihc.ru');
+define('DB_HOST', 'p406909.mysql.ihc.ru');
+
 
 define('DISABLE_WP_CRON', true);
 define('FS_METHOD', 'direct');
